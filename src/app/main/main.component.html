@@ -1,0 +1,47 @@
+<div style="height: calc(100vh - 56px);width: 100vw;">
+  <header class="d-flex justify-content-between align-items-center p-5">
+    <p class="logo">Vidlik</p>
+    <button class="signup"><p>Sign Up</p></button>
+  </header>
+  <div class="center-element">
+    <div class="time-gauge">
+      <p class="time">25:00</p>
+      <div class="gauge"
+           [style.background]="'conic-gradient(rgb(93 255 63) ' + 65 + 'deg, rgb(204 204 204 / 20%) ' + 65 + 'deg)'"></div>
+    </div>
+    <div class="controls mt-4 d-flex justify-content-between align-items-center">
+      <p>reset</p>
+      <svg *ngIf="start" (click)="start = !start" height="30" width="30" xmlns="http://www.w3.org/2000/svg"
+           viewBox="0 0 24 24">
+        <path
+          d="M16.3944 11.9998L10 7.73686V16.2628L16.3944 11.9998ZM19.376 12.4158L8.77735 19.4816C8.54759 19.6348 8.23715 19.5727 8.08397 19.3429C8.02922 19.2608 8 19.1643 8 19.0656V4.93408C8 4.65794 8.22386 4.43408 8.5 4.43408C8.59871 4.43408 8.69522 4.4633 8.77735 4.51806L19.376 11.5838C19.6057 11.737 19.6678 12.0474 19.5146 12.2772C19.478 12.3321 19.4309 12.3792 19.376 12.4158Z"
+          style="fill: var(--text-color)"></path>
+      </svg>
+      <svg *ngIf="!start" (click)="start = !start" height="30" width="30" xmlns="http://www.w3.org/2000/svg"
+           viewBox="0 0 24 24">
+        <path
+          d="M7 7V17H17V7H7ZM6 5H18C18.5523 5 19 5.44772 19 6V18C19 18.5523 18.5523 19 18 19H6C5.44772 19 5 18.5523 5 18V6C5 5.44772 5.44772 5 6 5Z"
+          style="fill: var(--text-color)"></path>
+      </svg>
+      <p>break</p>
+    </div>
+  </div>
+  <div style="margin: 2rem 3rem 10px auto;width: max-content;">
+    <div class="task d-flex justify-content-between align-items-center p-3">
+      <div class="checkbox"></div>
+      <div class="info d-flex flex-column">
+        <p class="task-title">Sign up to track your to-do list</p>
+        <p class="task-undertext">5 min</p>
+      </div>
+      <p class="task-undertext">Edit</p>
+    </div>
+  </div>
+</div>
+
+<footer class="footer">
+  <p>
+    Copyright © 2023 Vidlik. All rights reserved.
+    <br>
+    <span>developed by Anastasiia Dementyeva</span>
+  </p>
+</footer>
