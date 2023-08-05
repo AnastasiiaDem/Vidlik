@@ -1,0 +1,171 @@
+<div style="min-height: calc(100vh - 56px); width: 100vw">
+  <header class="d-flex justify-content-between align-items-center p-5">
+    <p class="logo">Vidlik</p>
+    <div class="d-flex gap-5 align-items-center">
+      <div class="d-flex align-items-center gap-2">
+        <p style="font-family: 'JetBrains', monospace; font-size: 12px">
+          {{ currentUser.firstName }} {{ currentUser.lastName }}
+        </p>
+        <button class="logout" (click)="logout()">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="15"
+            height="15"
+            viewBox="0 0 24 24"
+            fill="none"
+            style="stroke: var(--text-color)"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            class="lucide lucide-log-out"
+          >
+            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+            <polyline points="16 17 21 12 16 7" />
+            <line x1="21" x2="9" y1="12" y2="12" />
+          </svg>
+          Logout
+        </button>
+      </div>
+      <label class="switch">
+        <input type="checkbox" (click)="setTheme()" [checked]="!darkMode" />
+        <span class="slider"></span>
+      </label>
+    </div>
+  </header>
+  <div
+    class="mx-5 my-4 position-relative d-flex align-items-start justify-content-between"
+  >
+    <div style="width: 370px; margin-left: 0; margin-right: auto">
+      <div
+        class="d-flex align-items-center gap-3 mb-3"
+        style="cursor: pointer"
+        (click)="addNewTask()"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="30"
+          height="30"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke-width="1"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          class="lucide lucide-plus"
+          style="stroke: var(--text-color)"
+        >
+          <path d="M5 12h14" />
+          <path d="M12 5v14" />
+        </svg>
+        <p class="task-title">Add new task</p>
+      </div>
+      <ng-container
+        *ngFor="
+          let item of taskList | slice : 0 : 4;
+          let i = index;
+          trackBy: trackByFn
+        "
+      >
+        <div
+          class="task d-flex justify-content-between align-items-center p-3 mb-3"
+        >
+          <div class="d-flex justify-content-between align-items-center gap-3">
+            <div
+              class="checkbox"
+              (click)="checked = !checked"
+              [style.background]="
+                checked ? 'rgba(139,139,139,0.15)' : '#ffffff'
+              "
+            ></div>
+            <div class="info d-flex flex-column">
+              <p
+                class="task-title"
+                [style.textDecoration]="checked ? 'line-through' : 'none'"
+              >
+                {{ item.title }}
+              </p>
+              <p class="task-undertext">
+                {{ item['workMin'] }}/{{ item['shortBreakMin'] }}/{{
+                  item['longBreakMin']
+                }}
+                min
+              </p>
+            </div>
+          </div>
+          <p class="task-undertext" (click)="editTask()">Edit</p>
+        </div>
+      </ng-container>
+    </div>
+    <div
+      style="
+        width: 180px;
+        position: absolute;
+        left: 50%;
+        top: 0;
+        transform: translateX(-50%);
+      "
+    >
+      <app-timer></app-timer>
+    </div>
+    <div style="width: 370px; margin-left: auto; margin-right: 0">
+      <ng-container
+        *ngFor="
+          let item of taskList | slice : 5 : 9;
+          let i = index;
+          trackBy: trackByFn
+        "
+      >
+        <div
+          class="task d-flex justify-content-between align-items-center p-3 mb-3"
+        >
+          <div class="d-flex justify-content-between align-items-center gap-3">
+            <div
+              class="checkbox"
+              (click)="checked = !checked"
+              [style.background]="
+                checked ? 'rgba(139,139,139,0.15)' : '#ffffff'
+              "
+            ></div>
+            <div class="info d-flex flex-column">
+              <p
+                class="task-title"
+                [style.textDecoration]="checked ? 'line-through' : 'none'"
+              >
+                {{ item.title }}
+              </p>
+              <p class="task-undertext">
+                {{ item['workMin'] }}/{{ item['shortBreakMin'] }}/{{
+                  item['longBreakMin']
+                }}
+                min
+              </p>
+            </div>
+          </div>
+          <p class="task-undertext" (click)="editTask()">Edit</p>
+        </div>
+      </ng-container>
+      <div
+        class="d-flex align-items-center justify-content-center gap-3 mt-3"
+        style="cursor: pointer"
+      >
+        <p
+          *ngFor="
+            let _ of [].constructor(taskList.length / 4 - 1);
+            let i = index
+          "
+          class="task-title"
+          (click)="paginate(i)"
+        >
+          {{ i + 1 }}
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer class="footer">
+  <p>
+    Copyright © 2023 Vidlik. All rights reserved.
+    <br />
+    <span>developed by Anastasiia Dementyeva</span>
+  </p>
+</footer>

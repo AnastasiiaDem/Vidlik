@@ -1,0 +1,37 @@
+.main-block {
+  .shuffle-title {
+    font-size: 30px;
+    font-weight: 500;
+    text-transform: uppercase;
+    cursor: pointer;
+  }
+
+  .underline {
+    position: absolute;
+    right: 18px;
+    height: 2px;
+    bottom: 4px;
+    width: 107px;
+    background: #d4ff3e;
+  }
+
+  .arrow {
+    position: absolute;
+    right: -30px;
+    opacity: 0;
+    transition: all 0.3s;
+    cursor: pointer;
+  }
+
+  .undertext {
+    width: 362px;
+    text-align: center;
+    font-size: 15px;
+    line-height: 20px;
+    margin: 30px auto;
+  }
+
+  .maintext-block:hover .arrow {
+    opacity: 1;
+  }
+}

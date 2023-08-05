@@ -1,0 +1,61 @@
+<div class="time-gauge position-relative">
+  <p class="time">
+    {{ formatTime(pomodoroTime) }}
+    <span
+      style="
+        position: absolute;
+        bottom: 20%;
+        font-size: 15px;
+        color: var(--text-pale-color);
+      "
+      >{{ completedPomodoros }} /4</span
+    >
+  </p>
+  <div
+    class="gauge"
+    [style.background]="
+      'conic-gradient(#D4FF3E ' +
+      percent +
+      'deg, rgb(204 204 204 / 20%) ' +
+      percent +
+      'deg)'
+    "
+  ></div>
+</div>
+<div class="controls mt-4 d-flex justify-content-between align-items-center">
+  <p (click)="cancelPomodoro()">reset</p>
+  <svg
+    *ngIf="!interval"
+    (click)="startPomodoro()"
+    height="30"
+    width="30"
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 24 24"
+    fill="none"
+    style="stroke: var(--text-color)"
+    stroke-width="2"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    class="lucide lucide-play"
+  >
+    <polygon points="5 3 19 12 5 21 5 3" />
+  </svg>
+  <svg
+    *ngIf="!!interval"
+    (click)="stopPomodoro()"
+    height="30"
+    width="30"
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 24 24"
+    fill="none"
+    style="stroke: var(--text-color)"
+    stroke-width="2"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    class="lucide lucide-pause"
+  >
+    <rect width="4" height="16" x="6" y="4" />
+    <rect width="4" height="16" x="14" y="4" />
+  </svg>
+  <p (click)="break()">break</p>
+</div>
