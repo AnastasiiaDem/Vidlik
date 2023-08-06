@@ -1,5 +1,5 @@
 <div style="min-height: calc(100vh - 56px); width: 100vw">
-  <header class="d-flex justify-content-between align-items-center p-5">
+  <header class="d-flex justify-content-between align-items-center px-5 py-4">
     <p class="logo">Vidlik</p>
     <div class="d-flex gap-5 align-items-center">
       <div class="d-flex align-items-center gap-2">
@@ -33,9 +33,9 @@
     </div>
   </header>
   <div
-    class="mx-5 my-4 position-relative d-flex align-items-start justify-content-between"
+    class="m-5 position-relative d-flex align-items-start justify-content-between"
   >
-    <div style="width: 370px; margin-left: 0; margin-right: auto">
+    <div class="task-container">
       <div
         class="d-flex align-items-center gap-3 mb-3"
         style="cursor: pointer"
@@ -58,6 +58,7 @@
         </svg>
         <p class="task-title">Add new task</p>
       </div>
+      <div>
       <ng-container
         *ngFor="
           let item of taskList | slice : 0 : 3;
@@ -85,7 +86,7 @@
                 {{ item.title }}
               </p>
               <p class="task-undertext">
-                {{ item['workMin'] }}/{{ item['shortBreakMin'] }}/{{
+                {{item['rounds']}} rounds &nbsp;&nbsp; {{ item['workMin'] }}/{{ item['shortBreakMin'] }}/{{
                 item['longBreakMin']
                 }}
                 min
@@ -96,6 +97,7 @@
             Edit</p>
         </div>
       </ng-container>
+    </div>
     </div>
     <div
       style="
@@ -110,10 +112,11 @@
                  [rounds]="numberOfRounds">
       </app-timer>
     </div>
-    <div style="width: 370px; margin-left: auto; margin-right: 0">
+    <div class="task-container">
+      <div>
       <ng-container
         *ngFor="
-          let item of taskList | slice : 3 : 6;
+          let item of taskList | slice : sliceStart : sliceStart + 3;
           let i = index;
           trackBy: trackByFn
         "
@@ -137,10 +140,10 @@
                 {{ item.title }}
               </p>
               <p class="task-undertext">
-                {{ item['workMin'] }}/{{ item['shortBreakMin'] }}/{{
+                {{item['rounds']}} rounds &nbsp;&nbsp; {{ item['workMin'] }}/{{ item['shortBreakMin'] }}/{{
                 item['longBreakMin']
                 }}
-                min &nbsp;&nbsp;{{item['rounds']}}
+                min
               </p>
             </div>
           </div>
@@ -148,16 +151,17 @@
             Edit</p>
         </div>
       </ng-container>
+      </div>
       <div
-        class="d-flex align-items-center justify-content-center gap-2 mt-3"
-        style="cursor: pointer;font-size: 12px;"
+        class="d-flex align-items-center justify-content-center gap-2"
       >
         <p
           *ngFor="
-            let _ of pagNum;
-            let i = index
+            let _ of pagObj;
+            let i = index;
           "
-          class="task-title"
+          class="pagination"
+          [id]="'pag_' + i"
           (click)="paginate(i)"
         >
           {{ i + 1 }}

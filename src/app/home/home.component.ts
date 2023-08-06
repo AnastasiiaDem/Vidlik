@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {AfterViewChecked, AfterViewInit, Component, OnDestroy, OnInit} from '@angular/core';
 import {Subject, takeUntil} from 'rxjs';
 import {TaskService} from '../shared/services/task.service';
 import {Router} from '@angular/router';
@@ -22,13 +22,14 @@ export class HomeComponent implements OnInit, OnDestroy {
   errorMessage = '';
   successMessage = '';
   taskList: Array<TaskModel> = [];
-  pagNum: any;
+  pagObj: any;
   taskForm: FormGroup;
   action: string;
   workMinValue: number;
   shortBreakMinValue: number;
   longBreakMinValue: number;
   numberOfRounds: number;
+  sliceStart: number;
 
   constructor(
     public taskService: TaskService,
@@ -72,6 +73,8 @@ export class HomeComponent implements OnInit, OnDestroy {
       longBreakMin: [20, Validators.required],
       rounds: [4]
     });
+
+    this.sliceStart = 3;
   }
 
   ngOnDestroy() {
@@ -88,7 +91,7 @@ export class HomeComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.unsubscribe))
       .subscribe((res: Array<TaskModel>) => {
           this.taskList = res.filter(t => t.userId == this.currentUser._id);
-          this.pagNum = this.taskList.length > 6 ? [].constructor(Math.round(this.taskList.length / 3) - 1) : 0;
+          this.pagObj = this.taskList.length > 6 ? Array(Math.round(this.taskList.length / 3) - 1).fill(0) : 0;
         },
         (err) => {
           console.log(err);
@@ -103,7 +106,7 @@ export class HomeComponent implements OnInit, OnDestroy {
       .subscribe(
         (sub) => {
           this.socialAuthService.signOut().then().catch();
-          this.router.navigate(['/main']);
+          this.router.navigate(['/']);
         },
         (err) => {
           console.log(err);
@@ -129,8 +132,10 @@ export class HomeComponent implements OnInit, OnDestroy {
           console.log(res);
           this.submitted = false;
           this.successMessage = res;
+          setTimeout(() => {
           this.modalService.dismissAll();
           this.getAllTasks();
+          }, 1000);
         },
         (err) => {
           console.log(err);
@@ -146,8 +151,10 @@ export class HomeComponent implements OnInit, OnDestroy {
           console.log(res);
           this.submitted = false;
           this.successMessage = res;
-          this.modalService.dismissAll();
-          this.getAllTasks();
+          setTimeout(() => {
+            this.modalService.dismissAll();
+            this.getAllTasks();
+          }, 1000);
         },
         (err) => {
           console.log(err);
@@ -163,8 +170,10 @@ export class HomeComponent implements OnInit, OnDestroy {
           console.log(res);
           this.submitted = false;
           this.successMessage = res;
-          this.modalService.dismissAll();
-          this.getAllTasks();
+          setTimeout(() => {
+            this.modalService.dismissAll();
+            this.getAllTasks();
+          }, 1000);
         },
         (err) => {
           console.log(err);
@@ -174,7 +183,15 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   paginate(i) {
-
+    let prevI = -1;
+    this.sliceStart = 3 * (i + 1);
+    this.pagObj.forEach((obj, index) => {
+      if (index == i) {
+        (document.getElementById('pag_' + index) as HTMLElement).style.color = 'var(--text-color)';
+      } else {
+        (document.getElementById('pag_' + index) as HTMLElement).style.color = 'var(--text-pale-color)';
+      }
+    });
   }
 
   trackByFn(index: number, item: TaskModel) {

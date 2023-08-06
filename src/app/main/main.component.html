@@ -1,5 +1,5 @@
 <div style="min-height: calc(100vh - 56px); width: 100vw">
-  <header class="d-flex justify-content-between align-items-center p-5">
+  <header class="d-flex justify-content-between align-items-center px-5 py-4">
     <p class="logo">Vidlik</p>
     <div class="d-flex gap-5 align-items-center">
       <button class="signup" (click)="openModal(signupModal)">
@@ -11,7 +11,7 @@
       </label>
     </div>
   </header>
-  <div class="mx-5 my-4 position-relative">
+  <div class="m-5 position-relative">
     <div
       style="
         width: 180px;
@@ -33,11 +33,11 @@
         <div class="info d-flex flex-column">
           <p
             class="task-title"
-            [style.textDecoration]="checked ? 'line-through' : 'none'"
+            [style.text-decoration]="checked ? 'line-through' : 'none'"
           >
             Sign up to track your to-do list
           </p>
-          <p class="task-undertext">5/1/10 min</p>
+          <p class="task-undertext">4 rounds &nbsp;&nbsp; 5/1/10 min</p>
         </div>
         <p class="task-undertext" style="color: transparent">Edit</p>
       </div>

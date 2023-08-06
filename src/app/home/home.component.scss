@@ -67,3 +67,22 @@ input[type="range"]::-webkit-slider-thumb {
 .form-range {
   height: 1px;
 }
+
+.pagination {
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 300;
+  color: var(--text-pale-color);
+}
+
+.pagination:first-of-type {
+  color: var(--text-color);
+}
+
+.task-container {
+  width: 370px;
+  height: 300px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
