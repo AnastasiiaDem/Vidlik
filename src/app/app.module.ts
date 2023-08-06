@@ -2,7 +2,7 @@ import {NgModule} from '@angular/core';
 import {BrowserModule} from '@angular/platform-browser';
 import {AppComponent} from './app.component';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-import {CommonModule} from '@angular/common';
+import {CommonModule, NgOptimizedImage} from '@angular/common';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {AppRoutingModule} from './app-routing.module';
 import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
@@ -21,6 +21,7 @@ import {
 } from '@abacritt/angularx-social-login';
 import {TimerComponent} from './timer/timer.component';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
+import { HeaderComponent } from './header/header.component';
 
 @NgModule({
   declarations: [
@@ -29,6 +30,7 @@ import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
     HomeComponent,
     GreetingComponent,
     TimerComponent,
+    HeaderComponent,
   ],
   imports: [
     BrowserModule,
@@ -41,6 +43,7 @@ import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
     SocialLoginModule,
     GoogleSigninButtonModule,
     NgbModule,
+    NgOptimizedImage,
   ],
   providers: [
     HttpClientModule,

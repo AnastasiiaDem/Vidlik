@@ -1,16 +1,5 @@
 <div style="min-height: calc(100vh - 56px); width: 100vw">
-  <header class="d-flex justify-content-between align-items-center px-5 py-4">
-    <p class="logo">Vidlik</p>
-    <div class="d-flex gap-5 align-items-center">
-      <button class="signup" (click)="openModal(signupModal)">
-        <p>Sign Up</p>
-      </button>
-      <label class="switch ml-4">
-        <input type="checkbox" (click)="setTheme()" [checked]="!darkMode"/>
-        <span class="slider"></span>
-      </label>
-    </div>
-  </header>
+  <app-header [currentUser]="currentUser" (openModel)="openModal(signupModal)"></app-header>
   <div class="m-5 position-relative">
     <div
       style="
@@ -55,126 +44,104 @@
 
 <ng-template #signupModal let-modal>
   <div class="login-modal">
-    <ng-container *ngIf="!!successMessage">
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        width="24"
-        height="24"
-        viewBox="0 0 24 24"
-        style="
-          stroke: var(--text-color);
-          fill: none;
-          height: 100px;
-          width: 100px;
-        "
-        stroke-width="2"
-        stroke-linecap="round"
-        stroke-linejoin="round"
-        class="lucide lucide-check center-element"
+    <div class="card-header px-5 pt-4">
+      <div class="card-heading">Sign Up</div>
+    </div>
+    <div class="card-body p-4">
+      <form
+        class="needs-validation"
+        [formGroup]="userForm"
+        (ngSubmit)="onSubmit('register')"
       >
-        <polyline points="20 6 9 17 4 12"/>
-      </svg>
-    </ng-container>
-    <ng-container *ngIf="!successMessage">
-      <div class="card-header px-5 pt-4">
-        <div class="card-heading">Sign Up</div>
-      </div>
-      <div class="card-body p-4">
-        <form
-          class="needs-validation"
-          [formGroup]="userForm"
-          (ngSubmit)="onSubmit('register')"
-        >
-          <div class="form-floating mb-3">
-            <input
-              class="form-control"
-              formControlName="firstName"
-              type="text"
-              placeholder="First name"
-              [ngClass]="{ 'is-invalid': submitted && f.firstName.errors }"
-              required
-            />
-            <label>First Name</label>
-          </div>
-          <div class="form-floating mb-3">
-            <input
-              class="form-control"
-              formControlName="lastName"
-              type="text"
-              placeholder="Last name"
-              [ngClass]="{ 'is-invalid': submitted && f.lastName.errors }"
-              required
-            />
-            <label>Last Name</label>
-          </div>
-          <div class="form-floating mb-3">
-            <input
-              class="form-control"
-              formControlName="email"
-              type="email"
-              placeholder="name@example.com"
-              [ngClass]="{ 'is-invalid': submitted && f.email.errors }"
-              required
-            />
-            <label>Email</label>
-            <p
-              class="invalid-feedback"
-              *ngIf="f.email.errors && f.email.errors.email"
-            >
-              Email must be valid
-            </p>
-          </div>
-          <div class="form-floating mb-3">
-            <input
-              class="form-control"
-              type="password"
-              formControlName="password"
-              placeholder="Password"
-              [ngClass]="{ 'is-invalid': submitted && f.password.errors }"
-              required
-            />
-            <label>Password</label>
-            <p
-              class="invalid-feedback"
-              *ngIf="f.password.errors && f.password.errors.minlength"
-            >
-              Password must be at least 6 characters long
-              <br/>
-            </p>
-            <p
-              class="invalid-feedback"
-              *ngIf="f.password.errors && f.password.errors.pattern"
-            >
-              Your password must contain at least one uppercase, one lowercase,
-              and one number
-            </p>
-          </div>
-          <h6
-            *ngIf="!!errorMessage"
-            style="font-size: 12px; text-align: center; color: var(--error)"
+        <div class="form-floating mb-3">
+          <input
+            class="form-control"
+            formControlName="firstName"
+            type="text"
+            placeholder="First name"
+            [ngClass]="{ 'is-invalid': submitted && f.firstName.errors }"
+            required
+          />
+          <label>First Name</label>
+        </div>
+        <div class="form-floating mb-3">
+          <input
+            class="form-control"
+            formControlName="lastName"
+            type="text"
+            placeholder="Last name"
+            [ngClass]="{ 'is-invalid': submitted && f.lastName.errors }"
+            required
+          />
+          <label>Last Name</label>
+        </div>
+        <div class="form-floating mb-3">
+          <input
+            class="form-control"
+            formControlName="email"
+            type="email"
+            placeholder="name@example.com"
+            [ngClass]="{ 'is-invalid': submitted && f.email.errors }"
+            required
+          />
+          <label>Email</label>
+          <p
+            class="invalid-feedback"
+            *ngIf="f.email.errors && f.email.errors.email"
           >
-            {{ errorMessage }}
-          </h6>
-          <button class="btn mt-4" type="submit">Submit</button>
-        </form>
+            Email must be valid
+          </p>
+        </div>
+        <div class="form-floating mb-3">
+          <input
+            class="form-control"
+            type="password"
+            formControlName="password"
+            placeholder="Password"
+            [ngClass]="{ 'is-invalid': submitted && f.password.errors }"
+            required
+          />
+          <label>Password</label>
+          <p
+            class="invalid-feedback"
+            *ngIf="f.password.errors && f.password.errors.minlength"
+          >
+            Password must be at least 6 characters long
+            <br/>
+          </p>
+          <p
+            class="invalid-feedback"
+            *ngIf="f.password.errors && f.password.errors.pattern"
+          >
+            Your password must contain at least one uppercase, one lowercase,
+            and one number
+          </p>
+        </div>
         <h6
-          style="
+          *ngIf="!!errorMessage"
+          style="font-size: 12px; text-align: center; color: var(--error)"
+        >
+          {{ errorMessage }}
+        </h6>
+        <button class="btn mt-4" type="submit">Submit</button>
+      </form>
+      <h6
+        style="
             font-size: 12px;
             padding-top: 1rem;
             text-align: right;
             color: rgba(20, 20, 20, 0.5);
           "
+      >
+        Already have an account?
+        <span
+          style="color: rgba(20, 20, 20, 0.8); cursor: pointer"
+          id="loginbtn"
+          (click)="changeModal(loginModal, modal)"
+        >Log in</span
         >
-          Already have an account?
-          <span
-            style="color: rgba(20, 20, 20, 0.8); cursor: pointer"
-            id="loginbtn"
-            (click)="changeModal(loginModal, modal)"
-          >Log in</span
-          >
-        </h6>
-      </div>
-    </ng-container>
+      </h6>
+    </div>
   </div>
 </ng-template>
 
@@ -187,7 +154,7 @@
         height="24"
         viewBox="0 0 24 24"
         style="
-          stroke: var(--text-color);
+          stroke: #141414;
           fill: none;
           height: 100px;
           width: 100px;
@@ -212,7 +179,7 @@
             class="google-img"
             width="20"
             height="20"
-            src="https://img.icons8.com/color/48/google-logo.png"
+            ngSrc="https://img.icons8.com/color/48/google-logo.png"
             alt="google-logo"
           />
           <asl-google-signin-button

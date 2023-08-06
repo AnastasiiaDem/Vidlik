@@ -88,7 +88,7 @@ export class MainComponent implements OnInit, OnDestroy {
     return this.userForm.controls;
   }
 
-  onSubmit(action) {
+  onSubmit(action: string) {
     this.submitted = true;
 
     this.userForm.setValue({
@@ -121,12 +121,11 @@ export class MainComponent implements OnInit, OnDestroy {
     }, 1000);
   }
 
-  registerUser(user) {
+  registerUser(user: Object) {
     this.authenticationService
       .register(user)
       .pipe(takeUntil(this.unsubscribe), first())
-      .subscribe(
-        (data) => {
+      .subscribe(_ => {
           this.submitted = false;
           setTimeout(() => {
             (document.getElementById('loginbtn') as HTMLElement).click();
@@ -138,7 +137,7 @@ export class MainComponent implements OnInit, OnDestroy {
       );
   }
 
-  loginUser(user) {
+  loginUser(user: UserModel) {
     this.authenticationService
       .login(user.email, false, user.password)
       .pipe(takeUntil(this.unsubscribe), first())
@@ -157,7 +156,7 @@ export class MainComponent implements OnInit, OnDestroy {
       );
   }
 
-  openModal(content) {
+  openModal(content: any) {
     this.submitted = false;
     this.successMessage = '';
     this.errorMessage = '';
@@ -172,19 +171,8 @@ export class MainComponent implements OnInit, OnDestroy {
     this.modalService.open(content, {centered: true});
   }
 
-  changeModal(content, modal) {
+  changeModal(content: any, modal: any) {
     modal.close();
     this.openModal(content);
-  }
-
-  setTheme() {
-    this.darkMode = !this.darkMode;
-    document.documentElement.setAttribute(
-      'data-theme',
-      this.darkMode ? 'dark' : 'light'
-    );
-    document.documentElement.style.colorScheme = this.darkMode
-      ? 'dark'
-      : 'light';
   }
 }

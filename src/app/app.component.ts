@@ -21,6 +21,9 @@ export class AppComponent implements OnInit, OnDestroy {
     this.authenticationService.currentUser
       .pipe(takeUntil(this.unsubscribe))
       .subscribe((x) => (this.currentUser = x));
+
+    document.documentElement.setAttribute('data-theme', 'dark');
+    document.documentElement.style.colorScheme = 'dark';
   }
 
   ngOnInit() {

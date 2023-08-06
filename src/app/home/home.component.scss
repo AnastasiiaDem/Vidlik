@@ -1,13 +1,3 @@
-.logout {
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  padding: 5px 15px;
-  border: none;
-  background: transparent;
-  font-size: 15px;
-}
-
 .btn-delete {
   padding: 2px 5px;
   color: var(--error);
@@ -30,7 +20,6 @@ label {
 }
 
 .task-undertext {
-  color: var(--text-pale-color);
   font-size: 12px;
 }
 

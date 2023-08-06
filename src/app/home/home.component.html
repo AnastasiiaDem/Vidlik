@@ -1,103 +1,75 @@
 <div style="min-height: calc(100vh - 56px); width: 100vw">
-  <header class="d-flex justify-content-between align-items-center px-5 py-4">
-    <p class="logo">Vidlik</p>
-    <div class="d-flex gap-5 align-items-center">
-      <div class="d-flex align-items-center gap-2">
-        <p style="font-family: 'JetBrains', monospace; font-size: 12px">
-          {{ currentUser.firstName }} {{ currentUser.lastName }}
-        </p>
-        <button class="logout" (click)="logout()">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="15"
-            height="15"
-            viewBox="0 0 24 24"
-            fill="none"
-            style="stroke: var(--text-color)"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            class="lucide lucide-log-out"
-          >
-            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
-            <polyline points="16 17 21 12 16 7"/>
-            <line x1="21" x2="9" y1="12" y2="12"/>
-          </svg>
-          Logout
-        </button>
-      </div>
-      <label class="switch">
-        <input type="checkbox" (click)="setTheme()" [checked]="!darkMode"/>
-        <span class="slider"></span>
-      </label>
-    </div>
-  </header>
+  <app-header [currentUser]="currentUser"></app-header>
   <div
     class="m-5 position-relative d-flex align-items-start justify-content-between"
   >
     <div class="task-container">
-      <div
-        class="d-flex align-items-center gap-3 mb-3"
-        style="cursor: pointer"
-        (click)="openModal(addEditTaskModal, 'create')"
-      >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="30"
-          height="30"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke-width="1"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          class="lucide lucide-plus"
-          style="stroke: var(--text-color)"
-        >
-          <path d="M5 12h14"/>
-          <path d="M12 5v14"/>
-        </svg>
-        <p class="task-title">Add new task</p>
-      </div>
       <div>
-      <ng-container
-        *ngFor="
+        <div
+          class="d-flex align-items-center gap-3 mb-3"
+          style="cursor: pointer"
+          (click)="openModal(addEditTaskModal, 'create')"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="30"
+            height="30"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke-width="1"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            class="lucide lucide-plus"
+            style="stroke: var(--text-color)"
+          >
+            <path d="M5 12h14"/>
+            <path d="M12 5v14"/>
+          </svg>
+          <p class="task-title">Add new task</p>
+        </div>
+        <ng-container
+          *ngFor="
           let item of taskList | slice : 0 : 3;
           let i = index;
           trackBy: trackByFn
         "
-      >
-        <div
-          class="task d-flex justify-content-between align-items-center p-3 mb-3 gap-3"
-          [style.border-color]="item.status == 'Ongoing' ? 'var(--accent)' : 'rgba(139, 139, 139, 0.1)'"
         >
-          <div class="d-flex justify-content-between align-items-center gap-3">
-            <div
-              class="checkbox"
-              (click)="changeStatus(item)"
-              [style.background]="
+          <div
+            class="task d-flex justify-content-between align-items-center p-3 mb-3 gap-3"
+            [style.border-color]="item.status == 'Ongoing' ? 'var(--accent)' : 'rgba(139, 139, 139, 0.1)'"
+          >
+            <div class="d-flex justify-content-between align-items-center gap-3">
+              <div
+                class="checkbox"
+                (click)="changeStatus(item)"
+                [style.background]="
                 item.status == 'Done' ? 'rgba(139,139,139,0.15)' : '#ffffff'
               "
-            ></div>
-            <div class="info d-flex flex-column" (click)="changeStatus(item)">
-              <p
-                class="task-title"
-                [style.text-decoration]="item.status == 'Done' ? 'line-through' : 'none'"
-              >
-                {{ item.title }}
-              </p>
-              <p class="task-undertext">
-                {{item['rounds']}} rounds &nbsp;&nbsp; {{ item['workMin'] }}/{{ item['shortBreakMin'] }}/{{
-                item['longBreakMin']
-                }}
-                min
-              </p>
+              ></div>
+              <div class="info d-flex flex-column" (click)="changeStatus(item)">
+                <p
+                  class="task-title"
+                  [style.text-decoration]="item.status == 'Done' ? 'line-through' : 'none'"
+                >
+                  {{ item.title }}
+                </p>
+                <p class="task-undertext">
+                  {{item['rounds']}} rounds &nbsp;&nbsp; {{ item['workMin'] }}/{{ item['shortBreakMin'] }}/{{
+                  item['longBreakMin']
+                  }}
+                  min
+                </p>
+              </div>
             </div>
+            <p class="task-undertext"
+               style="cursor: pointer;"
+               [style.color]="item.status == 'Done' ? 'var(--error' : 'var(--text-pale-color)'"
+               (click)="item.status == 'Done' ? deleteTask(item) : openModal(addEditTaskModal, 'edit', item)">
+              {{item.status == 'Done' ? 'Delete' : 'Edit'}}
+            </p>
           </div>
-          <p class="task-undertext" style="cursor: pointer;" (click)="openModal(addEditTaskModal, 'edit', item)">
-            Edit</p>
-        </div>
-      </ng-container>
-    </div>
+        </ng-container>
+      </div>
     </div>
     <div
       style="
@@ -114,43 +86,48 @@
     </div>
     <div class="task-container">
       <div>
-      <ng-container
-        *ngFor="
+        <ng-container
+          *ngFor="
           let item of taskList | slice : sliceStart : sliceStart + 3;
           let i = index;
           trackBy: trackByFn
         "
-      >
-        <div
-          class="task d-flex justify-content-between align-items-center p-3 mb-3"
         >
-          <div class="d-flex justify-content-between align-items-center gap-3">
-            <div
-              class="checkbox"
-              (click)="changeStatus(item)"
-              [style.background]="
+          <div
+            class="task d-flex justify-content-between align-items-center p-3 mb-3 gap-3"
+            [style.border-color]="item.status == 'Ongoing' ? 'var(--accent)' : 'rgba(139, 139, 139, 0.1)'"
+          >
+            <div class="d-flex justify-content-between align-items-center gap-3">
+              <div
+                class="checkbox"
+                (click)="changeStatus(item)"
+                [style.background]="
                 item.status == 'Done' ? 'rgba(139,139,139,0.15)' : '#ffffff'
               "
-            ></div>
-            <div class="info d-flex flex-column">
-              <p
-                class="task-title"
-                [style.text-decoration]="item.status == 'Done' ? 'line-through' : 'none'"
-              >
-                {{ item.title }}
-              </p>
-              <p class="task-undertext">
-                {{item['rounds']}} rounds &nbsp;&nbsp; {{ item['workMin'] }}/{{ item['shortBreakMin'] }}/{{
-                item['longBreakMin']
-                }}
-                min
-              </p>
+              ></div>
+              <div class="info d-flex flex-column" (click)="changeStatus(item)">
+                <p
+                  class="task-title"
+                  [style.text-decoration]="item.status == 'Done' ? 'line-through' : 'none'"
+                >
+                  {{ item.title }}
+                </p>
+                <p class="task-undertext">
+                  {{item['rounds']}} rounds &nbsp;&nbsp; {{ item['workMin'] }}/{{ item['shortBreakMin'] }}/{{
+                  item['longBreakMin']
+                  }}
+                  min
+                </p>
+              </div>
             </div>
+            <p class="task-undertext"
+               style="cursor: pointer;"
+               [style.color]="item.status == 'Done' ? 'var(--error' : 'var(--text-pale-color)'"
+               (click)="item.status == 'Done' ? deleteTask(item) : openModal(addEditTaskModal, 'edit', item)">
+              {{item.status == 'Done' ? 'Delete' : 'Edit'}}
+            </p>
           </div>
-          <p class="task-undertext" style="cursor: pointer;" (click)="openModal(addEditTaskModal, 'edit', item)">
-            Edit</p>
-        </div>
-      </ng-container>
+        </ng-container>
       </div>
       <div
         class="d-flex align-items-center justify-content-center gap-2"
@@ -189,7 +166,7 @@
         height="24"
         viewBox="0 0 24 24"
         style="
-          stroke: var(--text-color);
+          stroke: #141414;
           fill: none;
           height: 100px;
           width: 100px;

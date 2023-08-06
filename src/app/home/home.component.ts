@@ -1,9 +1,7 @@
-import {AfterViewChecked, AfterViewInit, Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {Subject, takeUntil} from 'rxjs';
 import {TaskService} from '../shared/services/task.service';
-import {Router} from '@angular/router';
 import {AuthService} from '../shared/services/auth.service';
-import {SocialAuthService} from '@abacritt/angularx-social-login';
 import {statusEnum, TaskModel} from '../shared/models/task.model';
 import {UserModel} from '../shared/models/user.model';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
@@ -17,7 +15,6 @@ import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 export class HomeComponent implements OnInit, OnDestroy {
   private readonly unsubscribe: Subject<void> = new Subject();
   currentUser: UserModel;
-  darkMode = false;
   submitted = false;
   errorMessage = '';
   successMessage = '';
@@ -34,13 +31,9 @@ export class HomeComponent implements OnInit, OnDestroy {
   constructor(
     public taskService: TaskService,
     private authenticationService: AuthService,
-    private router: Router,
     private formBuilder: FormBuilder,
     private modalService: NgbModal,
-    private socialAuthService: SocialAuthService
   ) {
-    this.darkMode =
-      document.documentElement.getAttribute('data-theme') == 'dark';
     this.authenticationService.currentUser
       .pipe(takeUntil(this.unsubscribe))
       .subscribe((x) => {
@@ -91,38 +84,12 @@ export class HomeComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.unsubscribe))
       .subscribe((res: Array<TaskModel>) => {
           this.taskList = res.filter(t => t.userId == this.currentUser._id);
-          this.pagObj = this.taskList.length > 6 ? Array(Math.round(this.taskList.length / 3) - 1).fill(0) : 0;
+          this.pagObj = this.taskList.length > 6 ? Array(Math.ceil(this.taskList.length / 3) - 1).fill(0) : 0;
         },
         (err) => {
           console.log(err);
         }
       );
-  }
-
-  logout() {
-    this.authenticationService
-      .logout()
-      .pipe(takeUntil(this.unsubscribe))
-      .subscribe(
-        (sub) => {
-          this.socialAuthService.signOut().then().catch();
-          this.router.navigate(['/']);
-        },
-        (err) => {
-          console.log(err);
-        }
-      );
-  }
-
-  setTheme() {
-    this.darkMode = !this.darkMode;
-    document.documentElement.setAttribute(
-      'data-theme',
-      this.darkMode ? 'dark' : 'light'
-    );
-    document.documentElement.style.colorScheme = this.darkMode
-      ? 'dark'
-      : 'light';
   }
 
   addNewTask(task: TaskModel) {
@@ -183,9 +150,8 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   paginate(i) {
-    let prevI = -1;
     this.sliceStart = 3 * (i + 1);
-    this.pagObj.forEach((obj, index) => {
+    this.pagObj.forEach((_, index) => {
       if (index == i) {
         (document.getElementById('pag_' + index) as HTMLElement).style.color = 'var(--text-color)';
       } else {
@@ -200,6 +166,7 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   changeStatus(item: TaskModel) {
     let statusState: statusEnum;
+    let updatedItem: TaskModel;
 
     switch (item.status) {
       case statusEnum.Done:
@@ -207,6 +174,29 @@ export class HomeComponent implements OnInit, OnDestroy {
         break;
       case statusEnum.Waiting:
         statusState = statusEnum.Ongoing;
+        this.taskList.find(t => {
+          if (t._id != item._id && t.status == statusEnum.Ongoing) {
+            updatedItem = {
+              _id: t._id,
+              userId: t.userId,
+              title: t.title,
+              status: statusEnum.Waiting,
+              workMin: t.workMin,
+              shortBreakMin: t.shortBreakMin,
+              longBreakMin: t.longBreakMin,
+              rounds: t.rounds
+            };
+            this.taskService.updateTask(updatedItem)
+              .pipe(takeUntil(this.unsubscribe))
+              .subscribe(res => {
+                  console.log(res);
+                },
+                (err) => {
+                  console.log(err);
+                }
+              );
+          }
+        })
         break;
       case statusEnum.Ongoing:
         statusState = statusEnum.Done;
@@ -215,7 +205,7 @@ export class HomeComponent implements OnInit, OnDestroy {
         break;
     }
 
-    let updatedItem: TaskModel = {
+    updatedItem = {
       _id: item._id,
       userId: item.userId,
       title: item.title,
@@ -225,6 +215,7 @@ export class HomeComponent implements OnInit, OnDestroy {
       longBreakMin: item.longBreakMin,
       rounds: item.rounds
     };
+
     this.taskService.updateTask(updatedItem)
       .pipe(takeUntil(this.unsubscribe))
       .subscribe(res => {
