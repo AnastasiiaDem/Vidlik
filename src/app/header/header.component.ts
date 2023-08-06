@@ -38,7 +38,7 @@ export class HeaderComponent implements OnDestroy {
       .logout()
       .pipe(takeUntil(this.unsubscribe))
       .subscribe(_ => {
-          this.socialAuthService.signOut().then().catch();
+          this.socialAuthService.signOut().then().catch(err => console.log(err));
           this.router.navigate(['/']);
         },
         (err) => {
