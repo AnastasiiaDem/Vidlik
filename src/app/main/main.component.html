@@ -6,7 +6,7 @@
         <p>Sign Up</p>
       </button>
       <label class="switch ml-4">
-        <input type="checkbox" (click)="setTheme()" [checked]="!darkMode" />
+        <input type="checkbox" (click)="setTheme()" [checked]="!darkMode"/>
         <span class="slider"></span>
       </label>
     </div>
@@ -20,7 +20,8 @@
         transform: translateX(-50%);
       "
     >
-      <app-timer></app-timer>
+      <app-timer [workMin]="25" [shortBreakMin]="5" [longBreakMin]="20" [rounds]="4">
+      </app-timer>
     </div>
     <div style="width: 370px; margin-right: 0; margin-left: auto">
       <div class="task d-flex justify-content-between align-items-center p-3">
@@ -47,7 +48,7 @@
 <footer class="footer">
   <p>
     Copyright © 2023 Vidlik. All rights reserved.
-    <br />
+    <br/>
     <span>developed by Anastasiia Dementyeva</span>
   </p>
 </footer>
@@ -71,7 +72,7 @@
         stroke-linejoin="round"
         class="lucide lucide-check center-element"
       >
-        <polyline points="20 6 9 17 4 12" />
+        <polyline points="20 6 9 17 4 12"/>
       </svg>
     </ng-container>
     <ng-container *ngIf="!successMessage">
@@ -82,7 +83,7 @@
         <form
           class="needs-validation"
           [formGroup]="userForm"
-          (ngSubmit)="onSubmit(modal, 'register')"
+          (ngSubmit)="onSubmit('register')"
         >
           <div class="form-floating mb-3">
             <input
@@ -138,7 +139,7 @@
               *ngIf="f.password.errors && f.password.errors.minlength"
             >
               Password must be at least 6 characters long
-              <br />
+              <br/>
             </p>
             <p
               class="invalid-feedback"
@@ -150,7 +151,7 @@
           </div>
           <h6
             *ngIf="!!errorMessage"
-            style="font-size: 12px; text-align: center; color: #dc3545"
+            style="font-size: 12px; text-align: center; color: var(--error)"
           >
             {{ errorMessage }}
           </h6>
@@ -169,7 +170,7 @@
             style="color: rgba(20, 20, 20, 0.8); cursor: pointer"
             id="loginbtn"
             (click)="changeModal(loginModal, modal)"
-            >Log in</span
+          >Log in</span
           >
         </h6>
       </div>
@@ -196,7 +197,7 @@
         stroke-linejoin="round"
         class="lucide lucide-check center-element"
       >
-        <polyline points="20 6 9 17 4 12" />
+        <polyline points="20 6 9 17 4 12"/>
       </svg>
     </ng-container>
     <ng-container *ngIf="!successMessage">
@@ -234,7 +235,7 @@
         <form
           class="needs-validation"
           [formGroup]="userForm"
-          (ngSubmit)="onSubmit(modal, 'login')"
+          (ngSubmit)="onSubmit('login')"
         >
           <div class="form-floating mb-3">
             <input
@@ -260,7 +261,7 @@
           </div>
           <h6
             *ngIf="!!errorMessage"
-            style="font-size: 12px; text-align: center; color: #dc3545"
+            style="font-size: 12px; text-align: center; color: var(--error)"
           >
             {{ errorMessage }}
           </h6>
@@ -278,7 +279,7 @@
           <span
             style="color: rgba(20, 20, 20, 0.8); cursor: pointer"
             (click)="changeModal(signupModal, modal)"
-            >Sign Up</span
+          >Sign Up</span
           >
         </h6>
       </div>

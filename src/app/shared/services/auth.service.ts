@@ -1,19 +1,19 @@
-﻿import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { BehaviorSubject, Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
-import { UserModel } from '../models/user.model';
-import { TokenStorageService } from './token.service';
-import { environment } from '../../../environments/environment';
+﻿import {Injectable} from '@angular/core';
+import {HttpClient, HttpHeaders} from '@angular/common/http';
+import {BehaviorSubject, Observable} from 'rxjs';
+import {map} from 'rxjs/operators';
+import {UserModel} from '../models/user.model';
+import {TokenStorageService} from './token.service';
+import {environment} from '../../../environments/environment';
 
 const apiUrl = environment.apiUrl + '/auth';
 
 const options = {
-  headers: { 'Content-Type': 'application/json' },
+  headers: {'Content-Type': 'application/json'},
   withCredentials: true,
 };
 
-@Injectable({ providedIn: 'root' })
+@Injectable({providedIn: 'root'})
 export class AuthService {
   private currentUserSubject: BehaviorSubject<UserModel>;
   public currentUser: Observable<UserModel>;
@@ -38,7 +38,7 @@ export class AuthService {
 
   login(email, googleAuth, password) {
     return this.http
-      .post<any>(`${apiUrl}/login`, { email, password, googleAuth }, options)
+      .post<any>(`${apiUrl}/login`, {email, password, googleAuth}, options)
       .pipe(
         map((user) => {
           localStorage.setItem('currentUser', JSON.stringify(user));
@@ -65,7 +65,7 @@ export class AuthService {
       {
         refreshToken: token,
       },
-      { headers: new HttpHeaders({ 'Content-Type': 'application/json' }) }
+      {headers: new HttpHeaders({'Content-Type': 'application/json'})}
     );
   }
 }

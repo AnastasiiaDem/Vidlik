@@ -19,15 +19,15 @@
             stroke-linejoin="round"
             class="lucide lucide-log-out"
           >
-            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
-            <polyline points="16 17 21 12 16 7" />
-            <line x1="21" x2="9" y1="12" y2="12" />
+            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+            <polyline points="16 17 21 12 16 7"/>
+            <line x1="21" x2="9" y1="12" y2="12"/>
           </svg>
           Logout
         </button>
       </div>
       <label class="switch">
-        <input type="checkbox" (click)="setTheme()" [checked]="!darkMode" />
+        <input type="checkbox" (click)="setTheme()" [checked]="!darkMode"/>
         <span class="slider"></span>
       </label>
     </div>
@@ -39,7 +39,7 @@
       <div
         class="d-flex align-items-center gap-3 mb-3"
         style="cursor: pointer"
-        (click)="addNewTask()"
+        (click)="openModal(addEditTaskModal, 'create')"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -53,45 +53,47 @@
           class="lucide lucide-plus"
           style="stroke: var(--text-color)"
         >
-          <path d="M5 12h14" />
-          <path d="M12 5v14" />
+          <path d="M5 12h14"/>
+          <path d="M12 5v14"/>
         </svg>
         <p class="task-title">Add new task</p>
       </div>
       <ng-container
         *ngFor="
-          let item of taskList | slice : 0 : 4;
+          let item of taskList | slice : 0 : 3;
           let i = index;
           trackBy: trackByFn
         "
       >
         <div
-          class="task d-flex justify-content-between align-items-center p-3 mb-3"
+          class="task d-flex justify-content-between align-items-center p-3 mb-3 gap-3"
+          [style.border-color]="item.status == 'Ongoing' ? 'var(--accent)' : 'rgba(139, 139, 139, 0.1)'"
         >
           <div class="d-flex justify-content-between align-items-center gap-3">
             <div
               class="checkbox"
-              (click)="checked = !checked"
+              (click)="changeStatus(item)"
               [style.background]="
-                checked ? 'rgba(139,139,139,0.15)' : '#ffffff'
+                item.status == 'Done' ? 'rgba(139,139,139,0.15)' : '#ffffff'
               "
             ></div>
-            <div class="info d-flex flex-column">
+            <div class="info d-flex flex-column" (click)="changeStatus(item)">
               <p
                 class="task-title"
-                [style.textDecoration]="checked ? 'line-through' : 'none'"
+                [style.text-decoration]="item.status == 'Done' ? 'line-through' : 'none'"
               >
                 {{ item.title }}
               </p>
               <p class="task-undertext">
                 {{ item['workMin'] }}/{{ item['shortBreakMin'] }}/{{
-                  item['longBreakMin']
+                item['longBreakMin']
                 }}
                 min
               </p>
             </div>
           </div>
-          <p class="task-undertext" (click)="editTask()">Edit</p>
+          <p class="task-undertext" style="cursor: pointer;" (click)="openModal(addEditTaskModal, 'edit', item)">
+            Edit</p>
         </div>
       </ng-container>
     </div>
@@ -104,12 +106,14 @@
         transform: translateX(-50%);
       "
     >
-      <app-timer></app-timer>
+      <app-timer [workMin]="workMinValue" [shortBreakMin]="shortBreakMinValue" [longBreakMin]="longBreakMinValue"
+                 [rounds]="numberOfRounds">
+      </app-timer>
     </div>
     <div style="width: 370px; margin-left: auto; margin-right: 0">
       <ng-container
         *ngFor="
-          let item of taskList | slice : 5 : 9;
+          let item of taskList | slice : 3 : 6;
           let i = index;
           trackBy: trackByFn
         "
@@ -120,36 +124,37 @@
           <div class="d-flex justify-content-between align-items-center gap-3">
             <div
               class="checkbox"
-              (click)="checked = !checked"
+              (click)="changeStatus(item)"
               [style.background]="
-                checked ? 'rgba(139,139,139,0.15)' : '#ffffff'
+                item.status == 'Done' ? 'rgba(139,139,139,0.15)' : '#ffffff'
               "
             ></div>
             <div class="info d-flex flex-column">
               <p
                 class="task-title"
-                [style.textDecoration]="checked ? 'line-through' : 'none'"
+                [style.text-decoration]="item.status == 'Done' ? 'line-through' : 'none'"
               >
                 {{ item.title }}
               </p>
               <p class="task-undertext">
                 {{ item['workMin'] }}/{{ item['shortBreakMin'] }}/{{
-                  item['longBreakMin']
+                item['longBreakMin']
                 }}
-                min
+                min &nbsp;&nbsp;{{item['rounds']}}
               </p>
             </div>
           </div>
-          <p class="task-undertext" (click)="editTask()">Edit</p>
+          <p class="task-undertext" style="cursor: pointer;" (click)="openModal(addEditTaskModal, 'edit', item)">
+            Edit</p>
         </div>
       </ng-container>
       <div
-        class="d-flex align-items-center justify-content-center gap-3 mt-3"
-        style="cursor: pointer"
+        class="d-flex align-items-center justify-content-center gap-2 mt-3"
+        style="cursor: pointer;font-size: 12px;"
       >
         <p
           *ngFor="
-            let _ of [].constructor(taskList.length / 4 - 1);
+            let _ of pagNum;
             let i = index
           "
           class="task-title"
@@ -165,7 +170,125 @@
 <footer class="footer">
   <p>
     Copyright © 2023 Vidlik. All rights reserved.
-    <br />
+    <br/>
     <span>developed by Anastasiia Dementyeva</span>
   </p>
 </footer>
+
+
+<ng-template #addEditTaskModal let-modal>
+  <div class="login-modal">
+    <ng-container *ngIf="!!successMessage">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+        style="
+          stroke: var(--text-color);
+          fill: none;
+          height: 100px;
+          width: 100px;
+        "
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        class="lucide lucide-check center-element"
+      >
+        <polyline points="20 6 9 17 4 12"/>
+      </svg>
+    </ng-container>
+    <ng-container *ngIf="!successMessage">
+      <div class="card-header d-flex justify-content-between align-items-center px-5 pt-4">
+        <div class="card-heading">{{action != 'create' ? 'Edit Task' : 'New task'}}</div>
+        <button *ngIf="action != 'create'" class="btn btn-delete" (click)="deleteTask(taskForm.value)">delete</button>
+      </div>
+      <div class="card-body p-4">
+        <form
+          class="needs-validation"
+          [formGroup]="taskForm"
+          (ngSubmit)="onSubmit()"
+        >
+          <div class="form-floating mb-3">
+            <input
+              class="form-control"
+              formControlName="title"
+              type="text"
+              placeholder="Title"
+              [ngClass]="{ 'is-invalid': submitted && f.title.errors }"
+              required
+            />
+            <label>Title</label>
+          </div>
+          <div class="mb-3">
+            <label for="customRange0" class="form-label px-3">
+              Working session <span class="task-undertext">{{taskForm.value['workMin']}} min</span>
+            </label>
+            <input
+              formControlName="workMin"
+              placeholder="Working session"
+              type="range"
+              class="form-range"
+              min="0" max="60"
+              step="1"
+              id="customRange0"
+              [ngClass]="{ 'is-invalid': submitted && f.workMin.errors }"
+              required>
+          </div>
+          <div class="mb-3">
+            <label for="customRange1" class="form-label px-3">
+              Short break <span class="task-undertext">{{taskForm.value['shortBreakMin']}} min</span>
+            </label>
+            <input
+              formControlName="shortBreakMin"
+              placeholder="Short break"
+              type="range"
+              class="form-range"
+              min="0" max="60"
+              step="1"
+              id="customRange1"
+              [ngClass]="{ 'is-invalid': submitted && f.shortBreakMin.errors }"
+              required>
+          </div>
+          <div class="mb-3">
+            <label for="customRange2" class="form-label px-3">
+              Long break <span class="task-undertext">{{taskForm.value['longBreakMin']}} min</span>
+            </label>
+            <input
+              formControlName="longBreakMin"
+              placeholder="Long break"
+              type="range"
+              class="form-range"
+              min="0" max="60"
+              step="1"
+              id="customRange2"
+              [ngClass]="{ 'is-invalid': submitted && f.longBreakMin.errors }"
+              required>
+          </div>
+          <div class="mb-3">
+            <label for="customRange2" class="form-label px-3">
+              Number of rounds before long break <span class="task-undertext">{{taskForm.value['rounds']}}</span>
+            </label>
+            <input
+              formControlName="rounds"
+              placeholder="Rounds"
+              type="range"
+              class="form-range"
+              min="0" max="4"
+              step="1"
+              id="customRange3"
+              [ngClass]="{ 'is-invalid': submitted && f.rounds.errors }"
+              required>
+          </div>
+          <h6
+            *ngIf="!!errorMessage"
+            style="font-size: 12px; text-align: center; color: var(--error)"
+          >
+            {{ errorMessage }}
+          </h6>
+          <button class="btn mt-4" type="submit">Submit</button>
+        </form>
+      </div>
+    </ng-container>
+  </div>
+</ng-template>

@@ -1,8 +1,8 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Subject, takeUntil } from 'rxjs';
-import { AuthService } from './shared/services/auth.service';
-import { Router } from '@angular/router';
-import { UserModel } from './shared/models/user.model';
+import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Subject, takeUntil} from 'rxjs';
+import {AuthService} from './shared/services/auth.service';
+import {Router} from '@angular/router';
+import {UserModel} from './shared/models/user.model';
 
 @Component({
   selector: 'app-root',

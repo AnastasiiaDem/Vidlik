@@ -39,12 +39,14 @@ body {
   --text-pale-color: rgba(20, 20, 20, 0.3);
   --footer-color: rgb(242 242 242 / 80%);
   --hover-color: #f2f2f2;
+  --error: #dc3545;
+  --accent: #d4ff3e;
 }
 
 [data-theme='dark'] {
   --bg-color: #141414;
   --text-color: #ffffff;
-  --text-pale-color: rgba(255, 255, 255, 0.3);
+  --text-pale-color: rgb(139 139 139 / 50%);
   --footer-color: rgb(255 255 255 / 1%);
   --hover-color: #2c2c2c;
 }

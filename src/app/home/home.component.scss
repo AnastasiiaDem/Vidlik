@@ -7,3 +7,63 @@
   background: transparent;
   font-size: 15px;
 }
+
+.btn-delete {
+  padding: 2px 5px;
+  color: var(--error);
+  border-radius: 8px;
+  border: 2px solid var(--error);
+  background: transparent;
+  font-size: 13px;
+
+  &:hover {
+    background: rgba(220, 53, 69, 0.1);
+  }
+
+  &:focus {
+    -webkit-box-shadow: none !important;
+  }
+}
+
+label {
+  vertical-align: top;
+}
+
+.task-undertext {
+  color: var(--text-pale-color);
+  font-size: 12px;
+}
+
+input[type="range"] {
+  border-bottom: none !important;
+  -webkit-appearance: none;
+  appearance: none;
+  background: transparent;
+  cursor: pointer;
+}
+
+input[type="range"]::-webkit-slider-runnable-track {
+  background: #dee2e6;
+  height: 0.5px;
+  -webkit-box-shadow: none !important;
+
+  &:active, &:focus {
+    -webkit-box-shadow: none !important;
+  }
+}
+
+input[type="range"]::-webkit-slider-thumb {
+  margin-top: -7px;
+  -webkit-appearance: none;
+  appearance: none;
+  background-color: var(--accent);
+  -webkit-box-shadow: none !important;
+
+  &:active, &:focus {
+    -webkit-box-shadow: none !important;
+  }
+}
+
+.form-range {
+  height: 1px;
+}

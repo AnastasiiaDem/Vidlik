@@ -17,7 +17,7 @@
 }
 
 .gauge {
-  background: conic-gradient(#d4ff3e 0deg, rgb(204 204 204 / 20%) 0deg);
+  background: conic-gradient(var(--accent) 0deg, rgb(204 204 204 / 20%) 0deg);
   border-radius: 50%;
   z-index: -1;
   width: 200px;

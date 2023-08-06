@@ -6,12 +6,12 @@ import {
   HttpInterceptor,
   HttpRequest,
 } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 
-import { BehaviorSubject, Observable, throwError } from 'rxjs';
-import { catchError, filter, switchMap, take } from 'rxjs/operators';
-import { TokenStorageService } from './token.service';
-import { AuthService } from './auth.service';
+import {BehaviorSubject, Observable, throwError} from 'rxjs';
+import {catchError, filter, switchMap, take} from 'rxjs/operators';
+import {TokenStorageService} from './token.service';
+import {AuthService} from './auth.service';
 
 const TOKEN_HEADER_KEY = 'x-access-token';
 
@@ -25,7 +25,8 @@ export class AuthInterceptor implements HttpInterceptor {
   constructor(
     private tokenService: TokenStorageService,
     private authService: AuthService
-  ) {}
+  ) {
+  }
 
   intercept(
     req: HttpRequest<any>,
@@ -97,5 +98,5 @@ export class AuthInterceptor implements HttpInterceptor {
 }
 
 export const authInterceptorProviders = [
-  { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
+  {provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true},
 ];

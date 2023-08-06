@@ -1,11 +1,11 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
-import { AuthService } from '../shared/services/auth.service';
-import { first, Subject, takeUntil } from 'rxjs';
-import { UserModel } from '../shared/models/user.model';
-import { SocialAuthService } from '@abacritt/angularx-social-login';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Router} from '@angular/router';
+import {AuthService} from '../shared/services/auth.service';
+import {first, Subject, takeUntil} from 'rxjs';
+import {UserModel} from '../shared/models/user.model';
+import {SocialAuthService} from '@abacritt/angularx-social-login';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-main',
@@ -40,26 +40,31 @@ export class MainComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.socialAuthService.authState.subscribe((user) => {
-      this.authenticationService
-        .login(user.email, true, '')
-        .pipe(takeUntil(this.unsubscribe), first())
-        .subscribe(
-          (data) => {
-            this.submitted = false;
-            this.successMessage = data.message;
-            setTimeout(() => {
-              this.modalService.dismissAll();
-              this.router.navigate(['/home']);
-            }, 1000);
-          },
-          (err) => {
-            this.errorMessage = err;
-          }
-        );
+    this.socialAuthService.authState
+      .pipe(takeUntil(this.unsubscribe))
+      .subscribe((user) => {
+      if (!!user) {
+        this.authenticationService
+          .login(user.email, true, '')
+          .pipe(takeUntil(this.unsubscribe), first())
+          .subscribe(
+            (data) => {
+              this.submitted = false;
+              this.successMessage = data.message;
+              setTimeout(() => {
+                this.modalService.dismissAll();
+                this.router.navigate(['/home']);
+              }, 1000);
+            },
+            (err) => {
+              this.errorMessage = err;
+            }
+          );
+      }
     });
 
     this.userForm = this.formBuilder.group({
+      _id: [''],
       firstName: [''],
       lastName: [''],
       email: ['', [Validators.required, Validators.email]],
@@ -83,10 +88,11 @@ export class MainComponent implements OnInit, OnDestroy {
     return this.userForm.controls;
   }
 
-  onSubmit(modal, action) {
+  onSubmit(action) {
     this.submitted = true;
 
     this.userForm.setValue({
+      _id: Math.floor(Math.random() * 100),
       email: this.userForm.value.email,
       firstName: this.userForm.value.firstName,
       lastName: this.userForm.value.lastName,
@@ -99,7 +105,7 @@ export class MainComponent implements OnInit, OnDestroy {
 
     setTimeout(() => {
       let userObject: UserModel = {
-        _id: Math.random(),
+        _id: Math.round(Math.random() * 100),
         email: this.userForm.value.email,
         firstName: this.userForm.value.firstName,
         lastName: this.userForm.value.lastName,
@@ -156,13 +162,14 @@ export class MainComponent implements OnInit, OnDestroy {
     this.successMessage = '';
     this.errorMessage = '';
     this.userForm.setValue({
+      _id: '',
       email: '',
       firstName: '',
       lastName: '',
       password: '',
     });
 
-    this.modalService.open(content, { centered: true });
+    this.modalService.open(content, {centered: true});
   }
 
   changeModal(content, modal) {

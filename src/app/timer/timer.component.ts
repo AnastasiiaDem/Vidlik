@@ -1,49 +1,69 @@
-import { Component } from '@angular/core';
+import {Component, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
 
-const minutesToSeconds = (minutes) => minutes * 60;
-const secondsToMinutes = (seconds) => Math.floor(seconds / 60);
-const padWithZeroes = (number) => number.toString().padStart(2, '0');
-
-const POMODORO_S = minutesToSeconds(25);
-const LONG_BREAK_S = minutesToSeconds(20);
-const SHORT_BREAK_S = minutesToSeconds(5);
+const minutesToSeconds = (minutes: number) => minutes * 60;
+const secondsToMinutes = (seconds: number) => Math.floor(seconds / 60);
+const padWithZeroes = (number: number) => number.toString().padStart(2, '0');
 
 @Component({
   selector: 'app-timer',
   templateUrl: './timer.component.html',
   styleUrls: ['./timer.component.scss'],
 })
-export class TimerComponent {
-  pomodoroTime = POMODORO_S;
-  completedPomodoros = 0;
+export class TimerComponent implements OnInit, OnChanges {
+  @Input() workMin: number;
+  @Input() shortBreakMin: number;
+  @Input() longBreakMin: number;
+  @Input() rounds: number;
+  displayTime: number;
+  completedRounds = 0;
   interval = null;
   isRest = false;
   isLongBreak = false;
+  workSec: number;
+  shortBreakSec: number;
+  longBreakSec: number;
+  numberOfRounds: number;
+
+  ngOnInit() {
+    this.workSec = minutesToSeconds(25);
+    this.shortBreakSec = minutesToSeconds(5);
+    this.longBreakSec = minutesToSeconds(20);
+    this.numberOfRounds = 4;
+    this.displayTime = this.workSec;
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    this.workSec = minutesToSeconds(this.workMin);
+    this.shortBreakSec = minutesToSeconds(this.shortBreakMin);
+    this.longBreakSec = minutesToSeconds(this.longBreakMin);
+    this.numberOfRounds = this.rounds;
+    this.displayTime = this.workSec;
+  }
 
   get percent() {
     let time = this.isRest
       ? this.isLongBreak
-        ? LONG_BREAK_S
-        : SHORT_BREAK_S
-      : POMODORO_S;
-    return 360 - (this.pomodoroTime * 360) / time;
+        ? this.longBreakSec
+        : this.shortBreakSec
+      : this.workSec;
+    return 360 - (this.displayTime * 360) / time;
   }
 
-  formatTime(timeInSeconds) {
+  formatTime(timeInSeconds: number) {
     const minutes = secondsToMinutes(timeInSeconds);
     const remainingSeconds = timeInSeconds % 60;
     return `${padWithZeroes(minutes)}:${padWithZeroes(remainingSeconds)}`;
   }
 
-  startPomodoro() {
+  startRound() {
     if (!this.isRest) {
       this.interval = setInterval(() => {
-        if (this.pomodoroTime === 0) {
-          this.completedPomodoros++;
-          this.stopPomodoro();
-          this.completePomodoro();
+        if (this.displayTime === 0) {
+          this.completedRounds++;
+          this.stopRound();
+          this.completeRound();
         }
-        this.pomodoroTime -= 1;
+        this.displayTime -= 1;
       }, 1000);
     } else {
       this.rest();
@@ -51,48 +71,48 @@ export class TimerComponent {
   }
 
   break() {
-    this.stopPomodoro();
-    this.completePomodoro();
+    this.stopRound();
+    this.completeRound();
   }
 
-  completePomodoro() {
+  completeRound() {
     this.isRest = true;
-    if (this.completedPomodoros === 4) {
-      this.pomodoroTime = LONG_BREAK_S;
+    if (this.completedRounds === this.numberOfRounds) {
+      this.displayTime = this.longBreakSec;
       this.isLongBreak = true;
       this.rest();
-      this.completedPomodoros = 0;
+      this.completedRounds = 0;
     } else {
-      this.pomodoroTime = SHORT_BREAK_S;
+      this.displayTime = this.shortBreakSec;
       this.rest();
     }
   }
 
-  cancelPomodoro() {
-    this.stopPomodoro();
+  cancelRound() {
+    this.stopRound();
     this.isRest = false;
-    this.pomodoroTime = POMODORO_S;
-    this.completedPomodoros = 0;
+    this.displayTime = this.workSec;
+    this.completedRounds = 0;
   }
 
-  stopPomodoro() {
+  stopRound() {
     clearInterval(this.interval);
     this.interval = null;
   }
 
   rest() {
     this.interval = setInterval(() => {
-      if (this.pomodoroTime === 0) {
-        this.pomodoroTime = POMODORO_S;
+      if (this.displayTime === 0) {
+        this.displayTime = this.workSec;
         this.isRest = false;
         if (this.isLongBreak) {
-          this.cancelPomodoro();
+          this.cancelRound();
         } else {
-          this.stopPomodoro();
-          this.startPomodoro();
+          this.stopRound();
+          this.startRound();
         }
       }
-      this.pomodoroTime -= 1;
+      this.displayTime -= 1;
     }, 1000);
   }
 }

@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import {Component} from '@angular/core';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-greeting',
@@ -7,9 +7,9 @@ import { Router } from '@angular/router';
   styleUrls: ['./greeting.component.scss'],
 })
 export class GreetingComponent {
-  intervalId;
-  originalText;
-  letters;
+  intervalId: any;
+  originalText: any;
+  letters: any;
   darkMode = false;
 
   constructor(public router: Router) {
