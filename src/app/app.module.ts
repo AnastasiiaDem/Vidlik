@@ -20,8 +20,9 @@ import {
   SocialLoginModule,
 } from '@abacritt/angularx-social-login';
 import {TimerComponent} from './timer/timer.component';
-import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import { HeaderComponent } from './header/header.component';
+import {RouterModule} from '@angular/router';
+import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 
 @NgModule({
   declarations: [
@@ -44,6 +45,7 @@ import { HeaderComponent } from './header/header.component';
     GoogleSigninButtonModule,
     NgbModule,
     NgOptimizedImage,
+    RouterModule,
   ],
   providers: [
     HttpClientModule,
