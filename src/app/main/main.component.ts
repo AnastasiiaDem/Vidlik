@@ -1,11 +1,12 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
 import {AuthService} from '../shared/services/auth.service';
-import {first, Subject, takeUntil} from 'rxjs';
+import {finalize, first, Subject, takeUntil} from 'rxjs';
 import {UserModel} from '../shared/models/user.model';
 import {SocialAuthService} from '@abacritt/angularx-social-login';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
+import {NgxSpinnerService} from 'ngx-spinner';
 
 @Component({
   selector: 'app-main',
@@ -27,7 +28,8 @@ export class MainComponent implements OnInit, OnDestroy {
     private formBuilder: FormBuilder,
     private modalService: NgbModal,
     private authenticationService: AuthService,
-    private socialAuthService: SocialAuthService
+    private socialAuthService: SocialAuthService,
+    private spinner: NgxSpinnerService
   ) {
     this.darkMode =
       document.documentElement.getAttribute('data-theme') == 'dark';
@@ -43,25 +45,30 @@ export class MainComponent implements OnInit, OnDestroy {
     this.socialAuthService.authState
       .pipe(takeUntil(this.unsubscribe))
       .subscribe((user) => {
-      if (!!user) {
-        this.authenticationService
-          .login(user.email, true, '')
-          .pipe(takeUntil(this.unsubscribe), first())
-          .subscribe(
-            (data) => {
-              this.submitted = false;
-              this.successMessage = data.message;
-              setTimeout(() => {
-                this.modalService.dismissAll();
-                this.router.navigate(['/home']);
-              }, 1000);
-            },
-            (err) => {
-              this.errorMessage = err;
-            }
-          );
-      }
-    });
+        if (!!user) {
+          this.spinner.show();
+          this.authenticationService
+            .login(user.email, true, '')
+            .pipe(
+              takeUntil(this.unsubscribe),
+              finalize(() => this.spinner.hide()),
+              first()
+            )
+            .subscribe(
+              (data) => {
+                this.submitted = false;
+                this.successMessage = data.message;
+                setTimeout(() => {
+                  this.modalService.dismissAll();
+                  this.router.navigate(['/home']);
+                }, 1000);
+              },
+              (err) => {
+                this.errorMessage = err;
+              }
+            );
+        }
+      });
 
     this.userForm = this.formBuilder.group({
       _id: [''],
@@ -122,9 +129,14 @@ export class MainComponent implements OnInit, OnDestroy {
   }
 
   registerUser(user: Object) {
+    this.spinner.show();
     this.authenticationService
       .register(user)
-      .pipe(takeUntil(this.unsubscribe), first())
+      .pipe(
+        takeUntil(this.unsubscribe),
+        finalize(() => this.spinner.hide()),
+        first()
+      )
       .subscribe(_ => {
           this.submitted = false;
           setTimeout(() => {
@@ -138,9 +150,14 @@ export class MainComponent implements OnInit, OnDestroy {
   }
 
   loginUser(user: UserModel) {
+    this.spinner.show();
     this.authenticationService
       .login(user.email, false, user.password)
-      .pipe(takeUntil(this.unsubscribe), first())
+      .pipe(
+        takeUntil(this.unsubscribe),
+        finalize(() => this.spinner.hide()),
+        first()
+      )
       .subscribe(
         (data) => {
           this.submitted = false;

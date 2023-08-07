@@ -53,7 +53,8 @@
               "src/assets"
             ],
             "styles": [
-              "src/styles.scss"
+              "src/styles.scss",
+              "node_modules/ngx-spinner/animations/ball-8bits.css"
             ],
             "scripts": []
           },
@@ -123,7 +124,8 @@
               "src/assets"
             ],
             "styles": [
-              "src/styles.scss"
+              "src/styles.scss",
+              "node_modules/ngx-spinner/animations/ball-8bits.css"
             ],
             "scripts": []
           }

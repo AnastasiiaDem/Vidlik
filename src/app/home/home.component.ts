@@ -1,11 +1,12 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {Subject, takeUntil} from 'rxjs';
+import {finalize, Subject, takeUntil} from 'rxjs';
 import {TaskService} from '../shared/services/task.service';
 import {AuthService} from '../shared/services/auth.service';
 import {statusEnum, TaskModel} from '../shared/models/task.model';
 import {UserModel} from '../shared/models/user.model';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
+import {NgxSpinnerService} from 'ngx-spinner';
 
 @Component({
   selector: 'app-home',
@@ -33,6 +34,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     private authenticationService: AuthService,
     private formBuilder: FormBuilder,
     private modalService: NgbModal,
+    private spinner: NgxSpinnerService
   ) {
     this.authenticationService.currentUser
       .pipe(takeUntil(this.unsubscribe))
@@ -81,7 +83,9 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   getAllTasks() {
     this.taskService.getTasks()
-      .pipe(takeUntil(this.unsubscribe))
+      .pipe(
+        takeUntil(this.unsubscribe)
+      )
       .subscribe((res: Array<TaskModel>) => {
           this.taskList = res.filter(t => t.userId == this.currentUser._id);
           this.pagObj = this.taskList.length > 6 ? Array(Math.ceil(this.taskList.length / 3) - 1).fill(0) : 0;
@@ -93,15 +97,18 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   addNewTask(task: TaskModel) {
+    this.spinner.show();
     this.taskService.addTask(task)
-      .pipe(takeUntil(this.unsubscribe))
+      .pipe(
+        takeUntil(this.unsubscribe),
+        finalize(() => this.spinner.hide())
+      )
       .subscribe(res => {
-          console.log(res);
           this.submitted = false;
           this.successMessage = res;
           setTimeout(() => {
-          this.modalService.dismissAll();
-          this.getAllTasks();
+            this.modalService.dismissAll();
+            this.getAllTasks();
           }, 1000);
         },
         (err) => {
@@ -112,10 +119,13 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   updateTask(task: TaskModel) {
+    this.spinner.show();
     this.taskService.updateTask(task)
-      .pipe(takeUntil(this.unsubscribe))
+      .pipe(
+        takeUntil(this.unsubscribe),
+        finalize(() => this.spinner.hide())
+      )
       .subscribe(res => {
-          console.log(res);
           this.submitted = false;
           this.successMessage = res;
           setTimeout(() => {
@@ -134,7 +144,6 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.taskService.deleteTask(item._id)
       .pipe(takeUntil(this.unsubscribe))
       .subscribe(res => {
-          console.log(res);
           this.submitted = false;
           this.successMessage = res;
           setTimeout(() => {
@@ -196,7 +205,7 @@ export class HomeComponent implements OnInit, OnDestroy {
                 }
               );
           }
-        })
+        });
         break;
       case statusEnum.Ongoing:
         statusState = statusEnum.Done;

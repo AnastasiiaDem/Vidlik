@@ -23,6 +23,7 @@ import {TimerComponent} from './timer/timer.component';
 import { HeaderComponent } from './header/header.component';
 import {RouterModule} from '@angular/router';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
+import {NgxSpinnerModule} from 'ngx-spinner';
 
 @NgModule({
   declarations: [
@@ -46,6 +47,7 @@ import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
     NgbModule,
     NgOptimizedImage,
     RouterModule,
+    NgxSpinnerModule.forRoot({ type: 'ball-8bits' })
   ],
   providers: [
     HttpClientModule,
