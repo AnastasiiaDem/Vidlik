@@ -20,8 +20,7 @@ export class HeaderComponent implements OnDestroy {
   constructor(private authenticationService: AuthService,
               private socialAuthService: SocialAuthService,
               private router: Router) {
-    this.darkMode =
-      document.documentElement.getAttribute('data-theme') == 'dark';
+    this.darkMode = document.documentElement.getAttribute('data-theme') == 'dark';
   }
 
   ngOnDestroy() {

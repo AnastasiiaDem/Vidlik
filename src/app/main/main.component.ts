@@ -20,7 +20,6 @@ export class MainComponent implements OnInit, OnDestroy {
   submitted = false;
   errorMessage = '';
   successMessage = '';
-  darkMode = false;
   checked = false;
 
   constructor(
@@ -31,8 +30,6 @@ export class MainComponent implements OnInit, OnDestroy {
     private socialAuthService: SocialAuthService,
     private spinner: NgxSpinnerService
   ) {
-    this.darkMode =
-      document.documentElement.getAttribute('data-theme') == 'dark';
     this.authenticationService.currentUser
       .pipe(takeUntil(this.unsubscribe))
       .subscribe((x) => (this.currentUser = x));
