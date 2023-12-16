@@ -82,6 +82,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   getAllTasks() {
+    this.taskList = [];
     this.taskService.getTasks()
       .pipe(
         takeUntil(this.unsubscribe)

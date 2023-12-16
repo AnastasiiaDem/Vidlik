@@ -26,12 +26,52 @@
   .undertext {
     width: 362px;
     text-align: center;
-    font-size: 15px;
-    line-height: 20px;
     margin: 30px auto;
   }
 
   .maintext-block:hover .arrow {
     opacity: 1;
   }
+}
+
+
+@media (max-width: 480px) {
+  .main-block {
+    .underline {
+      left: 0;
+    }
+    .arrow {
+      right: 0;
+    }
+  }
+}
+
+@media (min-width: 481px) and (max-width: 768px) {
+  .main-block {
+    .underline {
+      left: 0;
+    }
+    .arrow {
+      right: 0;
+    }
+  }
+}
+
+@media (min-width: 769px) and (max-width: 863px) {
+  .main-block {
+    .underline {
+      left: 0;
+    }
+    .arrow {
+      right: 0;
+    }
+  }
+}
+
+@media (min-width: 864px) and (max-width: 1023px) {
+
+}
+
+@media (min-width: 1440px) {
+
 }

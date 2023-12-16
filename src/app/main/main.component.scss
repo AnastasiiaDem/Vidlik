@@ -1,5 +1,4 @@
 .task {
-  width: 370px;
   min-height: 68px;
   flex-shrink: 0;
   border-radius: 20px;
@@ -18,7 +17,6 @@
     font-size: 15px;
     font-weight: 500;
     text-decoration-color: var(--text-color);
-    width: 230px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -106,4 +104,21 @@
       background-color: transparent !important;
     }
   }
+}
+
+.timer-block {
+  width: 180px;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.task-block {
+  width: clamp(270px, calc(100% - 1.5rem), 350px);
+  margin-left: auto;
+  margin-right: 3rem;
+}
+
+.info {
+  width: 80%;
 }
