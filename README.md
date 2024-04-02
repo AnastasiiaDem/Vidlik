@@ -1,27 +1,27 @@
-# Vidlik
+### <span style="font-size: larger;">VIDLIK</span>
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 16.1.8.
+#### Overview:
+VIDLIK is a Pomodoro productivity application designed to help users manage their time effectively. With features such as user authentication, Google Authentication, and task management functionalities, VIDLIK aids users in boosting productivity and enhancing their work experience.
 
-## Development server
+#### Key Features:
+- User authentication system
+- Google Authentication integration
+- To-do list management
+- Work hour tracking
+- Pomodoro technique with rounds and breaks
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+#### Technologies Used:
+- Angular
+- TypeScript
+- RxJS
+- SCSS
+- Bootstrap
+- Node.js
+- MongoDB
 
-## Code scaffolding
-
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
-
-## Build
-
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
-
-## Running unit tests
-
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
-
-## Running end-to-end tests
-
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
-
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+#### How to Run:
+1. Clone the repository: `git clone https://github.com/anastasiiadem/vidlik.git`
+2. Navigate to the project directory: `cd vidlik`
+3. Install dependencies: `npm install`
+4. Start the application: `ng serve`
+5. Access VIDLIK in your browser at: `http://localhost:4200`
