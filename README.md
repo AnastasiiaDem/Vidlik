@@ -19,9 +19,5 @@ VIDLIK is a Pomodoro productivity application designed to help users manage thei
 - Node.js
 - MongoDB
 
-#### How to Run:
-1. Clone the repository: `git clone https://github.com/anastasiiadem/vidlik.git`
-2. Navigate to the project directory: `cd vidlik`
-3. Install dependencies: `npm install`
-4. Start the application: `ng serve`
-5. Access VIDLIK in your browser at: `http://localhost:4200`
+#### How to Access:
+Visit [vidlik.vercel.app](https://vidlik.vercel.app) to explore my portfolio website.
