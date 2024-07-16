@@ -20,4 +20,4 @@ VIDLIK is a Pomodoro productivity application designed to help users manage thei
 - MongoDB
 
 #### How to Access:
-Visit [vidlik.vercel.app](https://vidlik.vercel.app) to explore my portfolio website.
+Visit [vidlik.vercel.app](https://vidlik.vercel.app) to boost productivity and enhance your work experience.
